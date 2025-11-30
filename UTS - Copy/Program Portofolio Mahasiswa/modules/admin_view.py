@@ -1,5 +1,3 @@
-# file: modules/admin_view.py
-
 import sqlite3
 import os
 import hashlib
@@ -52,8 +50,6 @@ def view_all_portfolios_admin():
 def get_full_portfolio_details(portfolio_id):
     conn = sqlite3.connect('portfolio.db')
     cursor = conn.cursor()
-    
-    # Cek Porto
     cursor.execute("SELECT judul FROM Portofolio WHERE id_portofolio = ?", (portfolio_id,))
     if not cursor.fetchone():
         print("Portofolio tidak ditemukan.")
@@ -80,13 +76,9 @@ def get_full_portfolio_details(portfolio_id):
     
     conn.close()
     print("-" * 30)
-
-# --- FITUR HAPUS ITEM SPESIFIK (ADMIN) ---
 def delete_specific_item():
     clear_screen()
     print("--- HAPUS ITEM (SERTIFIKAT/PENGALAMAN) ---")
-    
-    # 1. Admin harus liat dulu ID Porto-nya
     view_all_portfolios_admin()
     try:
         p_id = int(input("\nMasukkan ID Portofolio target untuk melihat isinya: "))
@@ -103,7 +95,6 @@ def delete_specific_item():
         
         if choice == '1':
             item_id = int(input("Masukkan ID ITEM Pengalaman: "))
-            # Admin tidak perlu cek id_portofolio, dia bisa hapus apa saja berdasarkan ID item
             cursor.execute("DELETE FROM Pengalaman WHERE id_pengalaman = ?", (item_id,))
             if cursor.rowcount > 0: print("Pengalaman berhasil dihapus paksa.")
             else: print("ID Item tidak ditemukan.")
@@ -120,7 +111,6 @@ def delete_specific_item():
     except ValueError:
         print("Input harus angka.")
 
-# --- FITUR HAPUS TOTAL MAHASISWA ---
 def delete_student_total():
     clear_screen()
     print("--- HAPUS MAHASISWA (TOTAL) ---")
@@ -131,8 +121,6 @@ def delete_student_total():
         if input("Yakin hapus akun, biodata, & porto dia? (y/n): ").lower() == 'y':
             conn = sqlite3.connect('portfolio.db')
             cursor = conn.cursor()
-            
-            # Cari ID User pemilik porto
             cursor.execute('SELECT m.id_pengguna FROM Portofolio p JOIN Mahasiswa m ON p.NIM=m.NIM WHERE p.id_portofolio=?', (p_id,))
             res = cursor.fetchone()
             
@@ -151,7 +139,7 @@ def admin_menu(admin_data):
         print(f"=== ADMIN PANEL ({admin_data['username']}) ===")
         print("1. Lihat Detail Portofolio")
         print("2. Tambah Admin Baru")
-        print("3. Hapus Portofolio (Sertifikat/Pengalaman)") # <-- MENU BARU
+        print("3. Hapus Portofolio (Sertifikat/Pengalaman)") 
         print("4. Hapus Mahasiswa (Banned)")
         print("5. Logout")
 
@@ -168,10 +156,11 @@ def admin_menu(admin_data):
             add_new_admin()
             input("\nEnter...")
         elif c == '3':
-            delete_specific_item() # <-- Panggil fungsi hapus item
+            delete_specific_item() 
             input("\nEnter...")
         elif c == '4':
             delete_student_total()
             input("\nEnter...")
         elif c == '5':
+
             break
