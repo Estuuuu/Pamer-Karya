@@ -1,5 +1,3 @@
-# file: modules/user_view.py
-
 import sqlite3
 import os
 
@@ -7,7 +5,6 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def get_mahasiswa_data(id_pengguna):
-    """Mendapatkan data lengkap mahasiswa dari id_pengguna."""
     conn = sqlite3.connect('portfolio.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -21,7 +18,6 @@ def get_mahasiswa_data(id_pengguna):
     return data 
 
 def lihat_portfolio_saya(id_portofolio, nim, nama):
-    """Menampilkan detail lengkap portofolio milik sendiri."""
     conn = sqlite3.connect('portfolio.db')
     cursor = conn.cursor()
     cursor.execute("SELECT judul, deskripsi FROM Portofolio WHERE id_portofolio = ?", (id_portofolio,))
@@ -72,10 +68,8 @@ def tambah_sertifikat(id_portofolio):
     conn.close()
     print("Sertifikat baru berhasil ditambahkan!")
 
-# --- FITUR BARU: MENU HAPUS ---
 def menu_hapus_data(id_portofolio, nim, nama):
     while True:
-        # Tampilkan data dulu biar tau ID yang mau dihapus
         lihat_portfolio_saya(id_portofolio, nim, nama) 
         
         print("\n--- MENU HAPUS DATA ---")
@@ -131,7 +125,7 @@ def mahasiswa_menu(user_data):
         print("1. Lihat Portofolio Saya")
         print("2. Tambah Pengalaman")
         print("3. Tambah Sertifikat")
-        print("4. Hapus Data (Pengalaman/Sertifikat)") # <-- MENU NO 4 BARU
+        print("4. Hapus Data (Pengalaman/Sertifikat)") 
         print("5. Lihat Daftar Portofolio Mahasiswa Lain")
         print("6. Logout")
         
@@ -147,7 +141,7 @@ def mahasiswa_menu(user_data):
             tambah_sertifikat(id_portofolio)
             input("\nTekan Enter...")
         elif choice == '4':
-            menu_hapus_data(id_portofolio, nim, nama_mahasiswa) # <-- Panggil fungsi hapus
+            menu_hapus_data(id_portofolio, nim, nama_mahasiswa) 
         elif choice == '5':
             from modules.admin_view import view_all_portfolios_admin
             view_all_portfolios_admin()
@@ -155,4 +149,5 @@ def mahasiswa_menu(user_data):
         elif choice == '6':
             print("Anda telah logout."); break
         else:
+
             print("Pilihan tidak valid.")
