@@ -6,11 +6,8 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def cari_portfolio(filter_by, keyword):
-    """Mencari portofolio berdasarkan filter dan kata kunci."""
     conn = sqlite3.connect('portfolio.db')
     cursor = conn.cursor()
-    
-    # Membuat query dinamis berdasarkan filter
     query = f'''
         SELECT p.id_portofolio, p.judul, m.nama_mahasiswa, m.fakultas, m.prodi
         FROM Portofolio p
@@ -36,8 +33,6 @@ def guest_menu():
     while True:
         clear_screen()
         print("--- Mode Tamu: Jelajahi Portofolio Mahasiswa ---")
-        
-        # Tampilkan semua portofolio di awal
         conn = sqlite3.connect('portfolio.db')
         cursor = conn.cursor()
         cursor.execute('''
@@ -80,4 +75,5 @@ def guest_menu():
         else:
             print("Pilihan tidak valid.")
         
+
         input("\nTekan Enter untuk melanjutkan...")
