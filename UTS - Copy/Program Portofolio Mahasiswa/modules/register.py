@@ -1,20 +1,14 @@
-# file: modules/register.py
-
 import sqlite3
 import hashlib
 from getpass import getpass
 import os
 
-# --- KATA KUNCI PENDAFTARAN ---
 KODE_AKSES_MAHASISWA = "212"
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def register_new_student():
-    """
-    Fungsi untuk user mendaftarkan diri sendiri sebagai mahasiswa.
-    """
     clear_screen()
     print("--- Registrasi Akun Mahasiswa Baru ---")
     
@@ -54,23 +48,20 @@ def register_new_student():
             conn.close()
             return
 
-        #menyimpan data ke databasn
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
-        # Buat akun login di tabel Pengguna
+  
         cursor.execute(
             "INSERT INTO Pengguna (username, password, role) VALUES (?, ?, ?)",
             (username, hashed_password, 'mahasiswa')
         )
         id_pengguna_baru = cursor.lastrowid
 
-        # Simpan biodata di tabel Mahasiswa
         cursor.execute(
             "INSERT INTO Mahasiswa (NIM, nama_mahasiswa, tanggal_lahir, fakultas, prodi, tahun_angkatan, email, id_pengguna) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (nim, nama, tgl_lahir, fakultas, prodi, angkatan, email, id_pengguna_baru)
         )
         
-        # C. Buat "wadah" portofolio kosong
         judul_default = f"Portofolio {nama}"
         deskripsi_default = f"Kumpulan karya dan pencapaian oleh {nama}."
         cursor.execute(
@@ -92,4 +83,5 @@ def register_new_student():
         print(f"\nTerjadi error: {e}")
         conn.rollback()
     finally:
+
         conn.close()
