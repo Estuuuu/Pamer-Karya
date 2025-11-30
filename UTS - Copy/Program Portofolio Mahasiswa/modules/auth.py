@@ -6,17 +6,14 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def login():
-    """
-    Menangani proses login dan mengembalikan data pengguna jika berhasil.
-    """
     print("--- HALAMAN LOGIN ---")
     username = input("Username: ")
-    password = getpass("Password: ") # getpass menyembunyikan input password
+    password = getpass("Password: ") 
     
     hashed_password = hash_password(password)
 
     conn = sqlite3.connect('portfolio.db')
-    conn.row_factory = sqlite3.Row # Mengakses kolom dengan nama
+    conn.row_factory = sqlite3.Row 
     cursor = conn.cursor()
 
     cursor.execute(
@@ -28,6 +25,7 @@ def login():
     conn.close()
     
     if user:
-        return dict(user) # Mengembalikan data user sebagai dictionary
+        return dict(user) 
     else:
+
         return None
