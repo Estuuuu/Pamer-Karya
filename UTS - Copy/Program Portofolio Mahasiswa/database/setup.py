@@ -1,22 +1,14 @@
-# file: database/setup.py
-
 import sqlite3
 import hashlib
 
 def hash_password(password):
-    """Fungsi untuk hashing password."""
     return hashlib.sha256(password.encode()).hexdigest()
 
 def setup_database():
-    """
-    Membuat semua tabel yang diperlukan untuk aplikasi portofolio
-    dan memasukkan data admin pertama kali.
-    """
     print("Menjalankan setup database dengan struktur final...")
     conn = sqlite3.connect('portfolio.db')
     cursor = conn.cursor()
 
-    #Tabel Pengguna (Untuk otentikasi/login)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Pengguna (
         id_pengguna INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +18,6 @@ def setup_database():
     )
     ''')
 
-    #Tabel Mahasiswa (Untuk biodata lengkap)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Mahasiswa (
         NIM TEXT PRIMARY KEY,
@@ -41,7 +32,6 @@ def setup_database():
     )
     ''')
 
-    #Tabel Portofolio (Wadah utama, terhubung ke Mahasiswa via NIM)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Portofolio (
         id_portofolio INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,7 +42,6 @@ def setup_database():
     )
     ''')
 
-    # Tabel Sertifikat (Detail isi portofolio)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Sertifikat (
         id_sertifikat INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,7 +52,6 @@ def setup_database():
     )
     ''')
     
-    # 5. Tabel Pengalaman (Detail isi portofolio)
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Pengalaman (
         id_pengalaman INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,8 +62,7 @@ def setup_database():
         FOREIGN KEY (id_portofolio) REFERENCES Portofolio(id_portofolio) ON DELETE CASCADE
     )
     ''')
-    
-    # Memasukkan admin pertama kali jika tabel kosong
+
     cursor.execute("SELECT username FROM Pengguna WHERE username = 'admin'")
     if not cursor.fetchone():
         cursor.execute(
@@ -89,4 +76,5 @@ def setup_database():
     print("Setup database selesai dan siap digunakan.")
 
 if __name__ == '__main__':
+
     setup_database()
